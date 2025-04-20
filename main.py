@@ -44,6 +44,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        
         if event.type == pygame.MOUSEBUTTONDOWN:
             if start_button_rect.collidepoint(event.pos):
                 
@@ -51,9 +52,13 @@ while running:
                 player_height = 50
                 player_x = width // 2 - player_width // 2
                 player_y = height - 2 * player_height
-                player_rect = pygame.Rect(player_x, player_y, player_width, player_height)
+                
                 player_speed = 5
-
+                player_image = pygame.image.load('assets/player_move.gif')
+                player_image = pygame.transform.scale(player_image, (player_width, player_height))
+                player_rect = player_image.get_rect()
+                player_rect.topleft = (player_x, player_y)
+                
                 in_game = True
                 while in_game:
                     for event in pygame.event.get():
@@ -70,18 +75,12 @@ while running:
                             if event.key == pygame.K_DOWN:
                                 player_y += player_speed
 
-                            # Keep player within bounds
                             player_x = max(0, min(player_x, width - player_width))
                             player_y = max(0, min(player_y, height - player_height))
                             player_rect.topleft = (player_x, player_y)
 
-                    # Clear the screen
                     screen.fill(gray)
-
-                    # Draw the player
-                    pygame.draw.rect(screen, white, player_rect)
-
-                    # Update the display
+                    screen.blit(player_image, player_rect)
                     pygame.display.flip()
 
 
@@ -90,7 +89,6 @@ while running:
             if quit_button_rect.collidepoint(event.pos):
                 running = False
 
-    # Draw everything
     screen.fill(gray)
     screen.blit(title_text, title_rect)
 
