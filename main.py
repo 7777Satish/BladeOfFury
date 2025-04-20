@@ -46,9 +46,47 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if start_button_rect.collidepoint(event.pos):
-                print("Start Game clicked")  # Replace with game start logic
+                
+                player_width = 50
+                player_height = 50
+                player_x = width // 2 - player_width // 2
+                player_y = height - 2 * player_height
+                player_rect = pygame.Rect(player_x, player_y, player_width, player_height)
+                player_speed = 5
+
+                in_game = True
+                while in_game:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            in_game = False
+                            running = False
+                        if event.type == pygame.KEYDOWN:
+                            if event.key == pygame.K_LEFT:
+                                player_x -= player_speed
+                            if event.key == pygame.K_RIGHT:
+                                player_x += player_speed
+                            if event.key == pygame.K_UP:
+                                player_y -= player_speed
+                            if event.key == pygame.K_DOWN:
+                                player_y += player_speed
+
+                            # Keep player within bounds
+                            player_x = max(0, min(player_x, width - player_width))
+                            player_y = max(0, min(player_y, height - player_height))
+                            player_rect.topleft = (player_x, player_y)
+
+                    # Clear the screen
+                    screen.fill(gray)
+
+                    # Draw the player
+                    pygame.draw.rect(screen, white, player_rect)
+
+                    # Update the display
+                    pygame.display.flip()
+
+
             if options_button_rect.collidepoint(event.pos):
-                print("Options clicked")  # Replace with options menu logic
+                print("Options clicked")
             if quit_button_rect.collidepoint(event.pos):
                 running = False
 
